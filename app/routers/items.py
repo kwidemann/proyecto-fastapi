@@ -19,6 +19,16 @@ def read_items(
     items = session.exec(statement).all()
     return items
 
+@router.post("/", response_model=Item)
+def create_item(
+    item: Item,
+    session: Session = Depends(get_session),
+):
+    session.add(item)
+    session.commit()
+    session.refresh(item)
+    return item
+
 @router.put("/{item_id}", response_model=Item)
 def update_item(
     item_id: int, 
